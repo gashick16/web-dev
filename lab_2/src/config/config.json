@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "student",
+    "password": "12345678",
+    "database": "wp_labs",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": 5432
+  },
+  "test": {
+    "username": "student",
+    "password": "12345678",
+    "database": "wp_labs",
+    "host": "postgres",
+    "dialect": "postgres",
+    "port": 5432
+  },
+  "production": {
+    "username": "student",
+    "password": "12345678",
+    "database": "wp_labs",
+    "host": "postgres",
+    "dialect": "postgres",
+    "port": 5432
+  }
+}

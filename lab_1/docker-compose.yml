@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  newyear-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: newyear-api
+    ports:
+      - "4201:4201"
+    environment:
+      - PORT=4201
+      - NODE_ENV=production
