@@ -4,7 +4,7 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserId } from 'src/users/user-id.decorator';
-import { ApiCookieAuth, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiCreatedResponse, ApiOkResponse, ApiSecurity } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
 @Controller('todos')
@@ -14,7 +14,7 @@ export class TodosController {
     ){}
 
     @Get()
-    @ApiCookieAuth()
+    @ApiSecurity('AccessCookie')
     @ApiOkResponse({
         examples: {
             empty: {
@@ -42,7 +42,7 @@ export class TodosController {
     }
 
     @Get(":id")
-    @ApiCookieAuth()
+    @ApiSecurity('AccessCookie')
     @ApiOkResponse({
         examples: {
             empty: {
@@ -71,7 +71,7 @@ export class TodosController {
     }
 
     @Post()
-    @ApiCookieAuth()
+    @ApiSecurity('AccessCookie')
     @ApiCreatedResponse({
         example: {
             "id": "91e8018f-c954-471f-9fe6-73b18e547bb1",
@@ -94,7 +94,7 @@ export class TodosController {
     }
 
     @Patch(":id")
-    @ApiCookieAuth()
+    @ApiSecurity('AccessCookie')
     @ApiOkResponse({
         example: {
             "id": "91e8018f-c954-471f-9fe6-73b18e547bb1",
@@ -115,7 +115,7 @@ export class TodosController {
     }
 
     @Delete(":id")
-    @ApiCookieAuth()
+    @ApiSecurity('AccessCookie')
     @ApiOkResponse({
         example:     {
             "id": "15030b84-953c-4061-916b-ee004aacc7cf",

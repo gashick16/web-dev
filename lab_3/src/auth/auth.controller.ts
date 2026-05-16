@@ -6,8 +6,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserId } from 'src/users/user-id.decorator';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { STATUS_CODES } from 'http';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiSecurity } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -77,6 +76,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiSecurity('AccessCookie')
   @Post('logout')
   logout(@Res() res: Response,) {
     res.clearCookie('access_token');
@@ -85,6 +85,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiSecurity('AccessCookie')
   @Post('logout-all')
   logoutAll(
     @UserId() userId: string,
@@ -97,6 +98,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @ApiSecurity('RefreshCookie')
   @ApiOkResponse({
     example: {
       "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjJiNzRjODE1LTEwN2YtNDY2OC05M2I4LWRmYzEzZTFiZjM5ZSIsImxvZ2luIjoidGVzdF8xMCIsImlhdCI6MTc3ODc5MTgzNSwiZXhwIjoxNzc4NzkxODk1fQ.XQkSP_GUc7S164ALXqo6pT_g_Mm1WRcaGwOJ6mgwdEk",
@@ -133,6 +135,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('whoiam')
+  @ApiSecurity('AccessCookie')
   @ApiOkResponse({
     example: {
         "id": "2b74c815-107f-4668-93b8-dfc13e1bf39e",
@@ -147,7 +150,6 @@ export class AuthController {
   ) {
     return this.authService.whoiam(userId);
   }
-  
 
   @Get('oauth/yandex')
   @Redirect()
