@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  # app:
+  #   build: .
+  #   container_name: wp_labs_app_6
+  #   env_file: .env
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "4200:4200"
+  #   networks:
+  #     - wp_labs_network
+
+  mongo:
+    image: mongo:6
+    container_name: wp_labs_mongo
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    ports:
+      - "27017:27017"
+    volumes:
+      - wp_labs_mongo:/data/db
+    networks:
+      - wp_labs_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: wp_labs_redis_6
+    ports:
+      - "6379:6379"
+    volumes:
+      - wp_labs_redis:/data
+    networks:
+      - wp_labs_network
+    command: redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "--pass", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+    volumes:
+      - redis-insight:/data
+    networks:
+      - wp_labs_network
+
+networks:
+  wp_labs_network:
+
+volumes:
+  wp_labs_postgres:
+  wp_labs_redis:
+  wp_labs_mongo:
+  redis-insight:
